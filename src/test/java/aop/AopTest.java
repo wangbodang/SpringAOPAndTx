@@ -1,5 +1,6 @@
 package aop;
 
+import com.wangbodang.demo.entity.Foo;
 import com.wangbodang.demo.service.FooService;
 import com.wangbodang.employee.service.EmployeeService;
 import org.junit.After;
@@ -34,7 +35,20 @@ public class AopTest {
     @Test
     public void testAop(){
         FooService fooService = (FooService) ctx.getBean("fooService");
-        fooService.getFoo("fook");
+        Foo foo = new Foo();
+        try {
+            fooService.insertFoo(foo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAopUpdate(){
+        FooService fooService = (FooService) ctx.getBean("fooService");
+        Foo foo = new Foo();
+        fooService.updateFoo(foo);
     }
 
 }
