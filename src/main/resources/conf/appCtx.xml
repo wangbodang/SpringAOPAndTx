@@ -49,23 +49,29 @@
         <property name="basePackage" value="com.wangbodang.**.mapper"/>
     </bean>
 
+
+
+    <!-- AOP和事务的相关配置 -->
+
+    <!--自定义异常类-->
+    <bean id="ResultException" class="common.web.ResultException"></bean>
+
     <!--事务管理 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!--数据库连接池-->
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!-- AOP和事务的相关配置 -->
-
     <!-- 然后是声明一个事物建议tx:advice,spring为我们提供了事物的封装，这个就是封装在了<tx:advice/>中 -->
     <!-- <tx:advice/>有一个transaction-manager属性，我们可以用它来指定我们的事物由谁来管理。 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <!-- 配置这个事务建议的属性 -->
+        <!-- get find等查询方法不使用事务 其他方法都使用事务控制，当发生异常时整个方法事务回滚 -->
         <tx:attributes>
             <!-- 指定所有get开头的方法执行在只读事务上下文中 -->
             <tx:method name="get*" read-only="true"/>
             <!-- 其余方法执行在默认的读写上下文中 -->
-            <tx:method name="*"/>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception,ResultException"/>
         </tx:attributes>
     </tx:advice>
 

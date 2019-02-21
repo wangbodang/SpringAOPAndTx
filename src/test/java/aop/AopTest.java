@@ -39,7 +39,7 @@ public class AopTest {
         try {
             fooService.insertFoo(foo);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println(e.getMessage());
         }
     }
@@ -48,7 +48,12 @@ public class AopTest {
     public void testAopUpdate(){
         FooService fooService = (FooService) ctx.getBean("fooService");
         Foo foo = new Foo();
-        fooService.updateFoo(foo);
+        try {
+            fooService.updateFoo(foo);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("接受到的异常消息为 : "+e.getMessage());
+        }
     }
 
 }
