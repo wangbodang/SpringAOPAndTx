@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangbodang.employee.mapper.EmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.wangbodang.employee.entity.Employee" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="Age" property="age" jdbcType="INTEGER" />
+    <result column="Gender" property="gender" jdbcType="INTEGER" />
+    <result column="Hiredate" property="hiredate" jdbcType="DATE" />
+    <result column="Salary" property="salary" jdbcType="DECIMAL" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CreateId" property="createId" jdbcType="INTEGER" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateId" property="updateId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, Name, Age, Gender, Hiredate, Salary, CreateTime, CreateId, UpdateTime, UpdateId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from employee
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from employee
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wangbodang.employee.entity.Employee" >
+    insert into employee (Id, Name, Age, 
+      Gender, Hiredate, Salary, 
+      CreateTime, CreateId, UpdateTime, 
+      UpdateId)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{gender,jdbcType=INTEGER}, #{hiredate,jdbcType=DATE}, #{salary,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangbodang.employee.entity.Employee" >
+    insert into employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="age != null" >
+        Age,
+      </if>
+      <if test="gender != null" >
+        Gender,
+      </if>
+      <if test="hiredate != null" >
+        Hiredate,
+      </if>
+      <if test="salary != null" >
+        Salary,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="createId != null" >
+        CreateId,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="updateId != null" >
+        UpdateId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="hiredate != null" >
+        #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="salary != null" >
+        #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangbodang.employee.entity.Employee" >
+    update employee
+    <set >
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        Age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        Gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="hiredate != null" >
+        Hiredate = #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="salary != null" >
+        Salary = #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        CreateId = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        UpdateId = #{updateId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangbodang.employee.entity.Employee" >
+    update employee
+    set Name = #{name,jdbcType=VARCHAR},
+      Age = #{age,jdbcType=INTEGER},
+      Gender = #{gender,jdbcType=INTEGER},
+      Hiredate = #{hiredate,jdbcType=DATE},
+      Salary = #{salary,jdbcType=DECIMAL},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      CreateId = #{createId,jdbcType=INTEGER},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      UpdateId = #{updateId,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findAll" resultMap="BaseResultMap">
+    select *
+    from employee
+  </select>
+</mapper>
