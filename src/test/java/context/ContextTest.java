@@ -1,6 +1,6 @@
 package context;
 
-import com.wangbodang.employee.service.DemoService;
+import com.wangbodang.employee.service.EmployeeService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,18 +28,23 @@ public class ContextTest {
 
     @Test
     public void testSprintContext(){
-        DemoService demoService = (DemoService) ctx.getBean("demoService");
-        demoService.printAString();
+        EmployeeService employeeService = (EmployeeService) ctx.getBean("employeeService");
+        employeeService.printAString();
     }
 
     @Test
     public void testDataSourceFromCtx(){
-        DemoService demoService = (DemoService) ctx.getBean("demoService");
-        demoService.printListFromDataSource();
+        EmployeeService employeeService = (EmployeeService) ctx.getBean("employeeService");
+        employeeService.printListFromDataSource();
     }
     @Test
     public void testSqlSessionFromCtx(){
-        DemoService demoService = (DemoService) ctx.getBean("demoService");
-        demoService.printListFromSqlSession();
+        EmployeeService employeeService = (EmployeeService) ctx.getBean("employeeService");
+        employeeService.printListFromSqlSession();
+    }
+    @Test
+    public void testEmpMapperFromCtx(){
+        EmployeeService employeeService = (EmployeeService) ctx.getBean("employeeService");
+        employeeService.printListFromEmployeeMapper();
     }
 }

@@ -1,6 +1,6 @@
 package com.wangbodang.employee.service;
 
-public interface DemoService {
+public interface EmployeeService {
     void printAString();
 
     /**
@@ -11,4 +11,9 @@ public interface DemoService {
      * 用sqlSession查询
      */
     void printListFromSqlSession();
+
+    /**
+     * 用employeeMapper查询
+     */
+    void printListFromEmployeeMapper();
 }
