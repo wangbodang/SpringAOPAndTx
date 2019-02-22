@@ -9,6 +9,7 @@ import common.web.ResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Service("fooService")
@@ -38,20 +39,15 @@ public class FooServiceImpl implements FooService {
             throw new ResultException(remoteResult);
         }
     }
-    public void updateFoo(Foo foo) throws Exception{
+    public void updateFoo(Foo foo){
 
-        try {
+
             Employee employee = new Employee();
-            employee.setId(11010);
+            employee.setId(11012);
             employee.setName("李世民");
+            employee.setSalary(new BigDecimal("77878.23"));
             employee.setHiredate(new Date());
             employeeMapper.updateByPrimaryKeySelective(employee);
             "23".charAt(34);
-        } catch (Exception e) {
-            //e.printStackTrace();
-            System.out.println("--->update 业务层捕获异常 消息:"+e.getMessage());
-            throw new Exception("业务层抛出了异常");
-
-        }
     }
 }

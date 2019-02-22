@@ -7,5 +7,5 @@ public interface FooService {
     Foo getFoo(String fooName);
     Foo getFoo(String fooName, String barName);
     void insertFoo(Foo foo) throws ResultException;
-    void updateFoo(Foo foo) throws Exception;
+    void updateFoo(Foo foo);
 }

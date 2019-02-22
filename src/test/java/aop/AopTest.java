@@ -28,8 +28,8 @@ public class AopTest {
 
     @Test
     public void testEmpMapperFromCtx(){
-        EmployeeService demoService = (EmployeeService) ctx.getBean("demoService");
-        demoService.printListFromEmployeeMapper();
+        EmployeeService employeeService = (EmployeeService) ctx.getBean("employeeService");
+        employeeService.printListFromEmployeeMapper();
     }
 
     @Test

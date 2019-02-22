@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--加载properties文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:conf/jdbc.properties"/>
+    </bean>
+
+    <!-- 扫描包加载Service实现类 -->
+    <!--<context:component-scan base-package="com.wangbodang"></context:component-scan>-->
+    <context:component-scan base-package="com.wangbodang">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <!--配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </bean>
+
+    <!--mybatis和spring完美整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--扫描model包 -->
+        <property name="typeAliasesPackage" value="com.wangbodang.**.entity"/>
+        <!--扫描sql配置文件:mapper需要的xml文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <!--Mapper动态代理开发，扫描dao接口包-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--注入sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--给出需要扫描Dao接口包 -->
+        <property name="basePackage" value="com.wangbodang.**.mapper"/>
+    </bean>
+
+
+
+    <!-- AOP和事务的相关配置 -->
+
+    <!--自定义异常类-->
+    <bean id="ResultException" class="common.web.ResultException"></bean>
+
+    <!--事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--数据库连接池-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 然后是声明一个事物建议tx:advice,spring为我们提供了事物的封装，这个就是封装在了<tx:advice/>中 -->
+    <!-- <tx:advice/>有一个transaction-manager属性，我们可以用它来指定我们的事物由谁来管理。 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 配置这个事务建议的属性 -->
+        <!-- get find等查询方法不使用事务 其他方法都使用事务控制，当发生异常时整个方法事务回滚 -->
+        <tx:attributes>
+            <!-- 指定所有get开头的方法执行在只读事务上下文中 -->
+            <tx:method name="get*" read-only="true"/>
+            <!-- 其余方法执行在默认的读写上下文中 -->
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception,ResultException"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 我们定义一个切面，它匹配FooService接口定义的所有操作 -->
+    <aop:config>
+        <!-- <aop:pointcut/>元素定义AspectJ的切面表示法，这里是表示x.y.service.FooService包下的任意方法。 -->
+        <aop:pointcut id="fooServiceOperation" expression="execution(* com.wangbodang.demo.service.FooService.*(..))"/>
+        <!-- 然后我们用一个通知器：<aop:advisor/>把这个切面和tx:advice绑定在一起，表示当这个切面：fooServiceOperation执行时tx:advice定义的通知逻辑将被执行 -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"/>
+    </aop:config>
+
+
+</beans>
